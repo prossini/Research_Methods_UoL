@@ -4,7 +4,10 @@ Dr. Patrícia Rossini, Fall 2021-22
 
 
 
-Classes:
 
-Week 5 <br>
-Week 6
+<p><strong>Course Materials</strong></p>
+<ul>
+  
+  <li><a href="https://prossini.github.io/Research_Methods_UoL/Week5.html", target = "_blank">Week 5</a></li>
+</ul>
+</div>
