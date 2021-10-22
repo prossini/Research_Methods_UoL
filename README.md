@@ -6,5 +6,5 @@ Dr. Patrícia Rossini, Fall 2021-22
 
 Classes:
 
-Week 5
+Week 5 <br>
 Week 6
