@@ -66,14 +66,15 @@ However, the datasets we selected for our workshop (and for your assignment) are
 
 ## Getting Started
 
-Let's load our data and assign it to an object named "df":
+Let's load our data and assign it to an object named "df".
+Replace the path with your own downloads folder containing [this file](https://theuniversityofliverpool-my.sharepoint.com/:u:/g/personal/prossini_liverpool_ac_uk/EZt5HUqjpWJLuOjcNjrLwAkB1hQRd__Jf-F86LHWznAIgw?e=lGiiDj)
 ```{r}
-df <- read_sav("~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav")
+df <- read_sav("~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav") ## replace 
 ```
 
 Before doing anything else, we should inspect our data. This means looking at how many observations there are (in this case, number of survey respondents), and looking at the column names. 
 
-This dataset comes with a PDF file that contains the survey questions and their "labels", which are the column names you will see in R. When working with this type of survey, you should always keep the PDF open to refer to the correct columns.
+This dataset comes with a [PDF file](https://theuniversityofliverpool-my.sharepoint.com/:b:/g/personal/prossini_liverpool_ac_uk/EfUlnuOHSrRBiH7jngCJakIBWDAQ9SoNXWP2fsC6b3me-g?e=tpR5lL_) that contains the survey questions and their "labels", which are the column names you will see in R. When working with this type of survey, you should always keep the PDF open to refer to the correct columns.
 
 
 Using the command 'head', we can inspect the dataset:

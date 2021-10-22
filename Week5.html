@@ -206,10 +206,10 @@ save(df, file = &quot;df.RData&quot;)</code></pre>
 <p>However, the datasets we selected for our workshop (and for your assignment) are originally from the <a href="https://www.pewresearch.org/tools-and-resources/">Pew Research Center</a> and come in the form of SAV files, which is a common type of file used by SPSS. Since SPSS is a paid software (which you have access to with your student account and apps anywhere), we use R to read and manipulate SPSS files with the package “Haven”.</p>
 <div id="getting-started" class="section level2">
 <h2>Getting Started</h2>
-<p>Let’s load our data and assign it to an object named “df”:</p>
-<pre class="r"><code>df &lt;- read_sav(&quot;~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav&quot;)</code></pre>
+<p>Let’s load our data and assign it to an object named “df”. Replace the path with your own downloads folder containing <a href="https://theuniversityofliverpool-my.sharepoint.com/:u:/g/personal/prossini_liverpool_ac_uk/EZt5HUqjpWJLuOjcNjrLwAkB1hQRd__Jf-F86LHWznAIgw?e=lGiiDj">this file</a></p>
+<pre class="r"><code>df &lt;- read_sav(&quot;~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav&quot;) ## replace </code></pre>
 <p>Before doing anything else, we should inspect our data. This means looking at how many observations there are (in this case, number of survey respondents), and looking at the column names.</p>
-<p>This dataset comes with a PDF file that contains the survey questions and their “labels”, which are the column names you will see in R. When working with this type of survey, you should always keep the PDF open to refer to the correct columns.</p>
+<p>This dataset comes with a <a href="https://theuniversityofliverpool-my.sharepoint.com/:b:/g/personal/prossini_liverpool_ac_uk/EfUlnuOHSrRBiH7jngCJakIBWDAQ9SoNXWP2fsC6b3me-g?e=tpR5lL_">PDF file</a> that contains the survey questions and their “labels”, which are the column names you will see in R. When working with this type of survey, you should always keep the PDF open to refer to the correct columns.</p>
 <p>Using the command ‘head’, we can inspect the dataset:</p>
 <pre class="r"><code># this command prints the names of columns: 
 head(df)  #alternative colnames(df)</code></pre>
