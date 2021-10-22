@@ -1,0 +1,244 @@
+---
+title: "Week 5 - Basic Descriptives "
+author: "Patricia Rossini"
+date: "10/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+Using the Pew American Trends Dataset, we will use R explore basic descriptive statistics such as the mean, median, and standard deviation. We will also look at frequencies and proportions, and how to create simple frequency plots. 
+
+
+```{r calling packages, eval=FALSE, message=FALSE, inspect=FALSE}
+# you may need to install packages running the following line:
+install.packages("dplyr", "tidyverse", "descr", "haven")
+
+```
+
+
+```{r, message=FALSE}
+#loading our packages 
+library(dplyr)
+library(haven)
+library(descr)
+library(ggplot2)
+library(tidyverse)
+
+# run this options line to prevent R from generating scientific notations
+
+options(scipen=999, digits = 4)
+
+```
+
+
+Before digging in, here are some basic commands in R that you need to familiarize yourself with. 
+We will learn more as we progress in the module.
+
+
+```{r, eval=FALSE, message=FALSE, inspect=FALSE}
+# assign actions to an object
+x <- "something"
+
+# open csv files
+y <- read.csv("path.csv")
+
+# open SAV files (from SPSS)
+df <- read_sav("path.sav")
+#open RData files
+load("file.RData")
+
+# save as csv file
+write.csv(df, "file.csv", row.names = F)
+
+# save as RData file
+save(df, file = "df.RData")
+```
+
+
+Note that there is a code for CSV files and another one for RData files. RData files are great to work in R because you can save multiple objects and open them all with just one command instead of loading a CSV per dataframe.
+
+However, the datasets we selected for our workshop (and for your assignment) are originally from the [Pew Research Center](https://www.pewresearch.org/tools-and-resources/) and come in the form of SAV files, which is a common type of file used by SPSS. Since SPSS is a paid software (which you have access to with your student account and apps anywhere), we use R to read and manipulate SPSS files with the package "Haven". 
+
+## Getting Started
+
+Let's load our data and assign it to an object named "df":
+```{r}
+df <- read_sav("~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav")
+```
+
+Before doing anything else, we should inspect our data. This means looking at how many observations there are (in this case, number of survey respondents), and looking at the column names. 
+
+This dataset comes with a PDF file that contains the survey questions and their "labels", which are the column names you will see in R. When working with this type of survey, you should always keep the PDF open to refer to the correct columns.
+
+
+Using the command 'head', we can inspect the dataset:
+```{r}
+# this command prints the names of columns: 
+head(df)  #alternative colnames(df)
+
+```
+
+Then we can check all column names:
+
+```{r}
+# this command prints the names of columns: 
+names(df)  #alternative colnames(df)
+
+```
+
+As you can see, some names are very confusing. Looking at the PDF, we can identify some variables of interest. 
+
+For the purposes of the workshop, let's first look at a couple of demographics.
+
+**Gender**
+
+Gender (F_GENDER) is a categorical variable with 3 labels: man, women, other. 
+
+For categorical variables, we can look at the frequency of each category to get a sense of data distribution. 
+We don't use means or standard deviation to look at categorical variables because their 'numbering' is arbitrary. 
+
+
+```{r}
+print_labels(df$F_GENDER) # this tells us the labels
+freq(df$F_GENDER) # frequency distribution of gender 
+
+```
+We now know that our dataset has more women than men (54% vs 44%). 
+
+**Age**
+
+Age can be reported as a numeric variable (when participants are asked their exact age) or as a ordinal variable, meaning that age is aggregated in specific age "bands" that are clearly in order. In the Pew data, F_AGECAT aggregates age in four categories, 18-29; 30-49; 50-64; 65+. 
+
+When age is available as a numeric variable, it is common to use basic descriptive measures such as mean and standard deviation to describe the age. Those can (in theory) be applied to ordinal variables, but they don't make much sense in this case because there is a big gap in the ranges. 
+
+
+```{r, fig.show= 'hide'}
+print_labels(df$F_AGECAT) # this tells us the labels
+freq(df$F_AGECAT) # frequency distribution of respondents per age range 
+
+```
+**Mean and Standard Deviation**
+We can calculate means and standard deviations using 'base' R functions. There are also many packages, such as "Psych", that can you can use to create descriptive statistics. For now, let's keep it simple.
+
+In base R, the following functions are used to compute descriptives:
+
+```{r descriptives, eval=FALSE, message=FALSE, inspect=FALSE}
+mean(variable)
+sd(variable)
+median(variable)
+summary(variable) # this gives you min and max values, mean and median
+````
+
+Since we don't have any numeric variable in the data, let's take the ordinal category for frequency of posting things about political and social issues on social media (AVOIDPT1) as an example
+
+```{r descr examples,fig.show= 'hide'}
+print_labels(df$AVOIDPT1_W74) ## check the labels
+freq(df$AVOIDPT1_W74) ## check the distribution of categories
+df$AVOIDPT1_W74[df$AVOIDPT1_W74==99] <- NA ## always remove 99 before calculating means
+summary(df$AVOIDPT1_W74, na.rm = TRUE)
+sd(df$AVOIDPT1_W74, na.rm = TRUE)
+
+```
+
+Looking at the mean, we can note that on average, respondents are not very active on social media, with the majority of people posting about politics rarely or not at all. 
+
+
+
+**Crosstabulation**
+
+Let's start looking at crosstabulation, that is, when you use a variable (e.g. Gender) to understand another variable (e.g. posting about politics).
+
+We can create tables in R in several ways:
+```{r}
+table(df$F_GENDER, df$AVOIDPT1_W74)
+
+CrossTable(df$F_GENDER, df$AVOIDPT1_W74, prop.t = F, prop.chisq = F)
+
+```
+Of course, we need to remember each label (if you don't, just call print_labels again) to interpret the table. 
+The second table presents proportions per row and per column. 
+
+
+We can also plot these in a figure. For that, we 
+will use ggplot2, from tidyverse. It's a very flexible package and you can customize everything in your plot. Take a look at the [documentation here to start creating more elaborate plots](https://ggplot2.tidyverse.org/)
+
+
+```{r plot}
+#First transform the variables from labeled to factor. 
+#as_factor is a function of the haven package, specifically to deal with SPSS files (or other imported labeled data). 
+
+df$F_GENDER <- as_factor(df$F_GENDER)
+df$AVOIDPT1_W74 <- as_factor(df$AVOIDPT1_W74)
+```
+
+
+To create our plot, we will use a 'pipe' to filter the data and remove the missing values (NAs) before we call ggplot to create the graphics. 
+
+```{r ggplot}
+# basic plot filtering out NA and undesired values
+df %>% 
+  filter(!is.na(AVOIDPT1_W74), !is.na(F_GENDER)) %>%
+  ggplot(aes(x=AVOIDPT1_W74, fill = F_GENDER)) +
+  geom_bar(position = "dodge")
+```
+
+The plot can take several arguments for customization. For instance, we can add some text to it, filter more values, or change the theme.
+
+```{r}
+df %>% 
+  filter(!is.na(AVOIDPT1_W74), !is.na(F_GENDER), F_GENDER != "Refused", F_GENDER != "In some other way") %>%
+  ggplot(aes(x=AVOIDPT1_W74, fill = F_GENDER)) +
+  geom_bar(position = "dodge") + 
+  labs(title = "Frequency of political expression on social media", caption = "Source: Pew Research Center - American Values Survey Wave 47", x = "Freq. Posting about Politics", y = "Number of respondents", fill = "Gender") + theme_minimal()
+
+```
+
+Finally, let's create a plot using percentages. 
+To do this, we will use pipes again to calculate percentages before creating the plot:
+
+
+```{r}
+df %>% 
+  filter(!is.na(AVOIDPT1_W74), !is.na(F_GENDER), F_GENDER != "Refused", F_GENDER != "In some other way") %>%
+  group_by(F_GENDER, AVOIDPT1_W74) %>% # we are using this to make sure the data is grouped to calculate proportions
+  summarize(n = n()) %>% 
+  mutate(perc = 100*n/sum(n)) 
+
+`````
+
+
+Now that we learned how to calculate percentages using two variables, let's incorporate them in the plot with another pipe:
+
+
+
+```{r percentage plot, message=FALSE}
+df %>% 
+  filter(!is.na(AVOIDPT1_W74), !is.na(F_GENDER), F_GENDER != "Refused", F_GENDER != "In some other way") %>%
+  group_by(F_GENDER, AVOIDPT1_W74) %>% # we are using this to make sure the data is grouped to calculate proportions
+  summarize(n = n()) %>% 
+  mutate(perc = 100*n/sum(n)) %>%
+  ggplot(aes(x= AVOIDPT1_W74, y = perc, fill = F_GENDER)) +
+  geom_bar(position = "dodge",stat = "identity") + #we changed stat to identity because we  
+  labs(title = "Frequency of political expression on social media", caption = "Source: Pew Research Center - American Values Survey Wave 47", x = "Freq. Posting about Politics", y = "Frequency (%)", fill = "Gender") + 
+  theme_minimal() + 
+  ylim(c(0, 60)) # this determines the limits of the y axis. 
+
+
+```
+And done :) 
+
+You can save/export the figures you created using the following code: 
+
+```{r save plot, eval=FALSE, message=FALSE, inspect=FALSE}
+ggsave(
+  filename,
+  plot = last_plot(), dpi = 300)
+```
+
+To improve your skills and prepare for the assignment, take a look at the PDF 'codebook', select a couple of different variables and try to replicate the examples of this workshop at home. 
+
