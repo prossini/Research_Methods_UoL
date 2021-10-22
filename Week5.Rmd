@@ -77,7 +77,8 @@ Before doing anything else, we should inspect our data. This means looking at ho
 This dataset comes with a [PDF file](https://theuniversityofliverpool-my.sharepoint.com/:b:/g/personal/prossini_liverpool_ac_uk/EfUlnuOHSrRBiH7jngCJakIBWDAQ9SoNXWP2fsC6b3me-g?e=tpR5lL_) that contains the survey questions and their "labels", which are the column names you will see in R. When working with this type of survey, you should always keep the PDF open to refer to the correct columns.
 
 
-Using the command 'head', we can inspect the dataset:
+Using the command 'head', we can inspect the dataset: 
+
 ```{r}
 # this command prints the names of columns: 
 head(df)  #alternative colnames(df)
