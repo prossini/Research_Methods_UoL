@@ -313,7 +313,7 @@ freq(df$AVOIDPT1_W74R) # now we check if the numbers match (they do :)
 df$AVOIDPT1_W74R <- as.numeric(df$AVOIDPT1_W74R) #making sure the variable is numeric
 
 # now the correlation
-cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, use='complete.obs') # the use = complete.obs is to remove missing values from the data.
+cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, method = "pearson", use='complete.obs') # the use = complete.obs is to remove missing values from the data.
 
   
 ```
