@@ -600,10 +600,10 @@ freq(df$AVOIDPT1_W74R) # now we check if the numbers match (they do :) </code></
 ## 1          2704  26.791         36.42
 ## NA&#39;s       2669  26.444              
 ## Total     10093 100.000        100.00</code></pre>
-<pre class="r"><code>df$AVOIDPT1_W74R &lt;- as.numeric(df$AVOIDPT1_W74R)
+<pre class="r"><code>df$AVOIDPT1_W74R &lt;- as.numeric(df$AVOIDPT1_W74R) #making sure the variable is numeric
 
 # now the correlation
-cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, use=&#39;complete.obs&#39;)</code></pre>
+cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, use=&#39;complete.obs&#39;) # the use = complete.obs is to remove missing values from the data.</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
