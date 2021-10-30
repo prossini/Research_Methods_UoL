@@ -1,5 +1,5 @@
 ---
-title: "Week 5 - Basic Descriptives "
+title: "Week 5 - Basic Descriptives & Week 6 - Correlations & Hypothesis Testing"
 author: "Patricia Rossini"
 date: "10/21/2021"
 output: html_document
@@ -13,6 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Using the Pew American Trends Dataset, we will use R explore basic descriptive statistics such as the mean, median, and standard deviation. We will also look at frequencies and proportions, and how to create simple frequency plots. 
 
+Then, we will look at some basic measures of association and significance tests, such as correlations, t-tests, and chi-square tests. 
+
+
+## R Basics
+
+First, let's make sure you have the packages you need. Important: you only need to install packages if it is the first time you are using R in your computer. If you have completed this step before, just jump straight to the next section to get started!
 
 ```{r calling packages, eval=FALSE, message=FALSE, inspect=FALSE}
 # you may need to install packages running the following line:
@@ -20,20 +26,6 @@ install.packages("dplyr", "tidyverse", "descr", "haven")
 
 ```
 
-
-```{r, message=FALSE}
-#loading our packages 
-library(dplyr)
-library(haven)
-library(descr)
-library(ggplot2)
-library(tidyverse)
-
-# run this options line to prevent R from generating scientific notations
-
-options(scipen=999, digits = 4)
-
-```
 
 
 Before digging in, here are some basic commands in R that you need to familiarize yourself with. 
@@ -62,9 +54,36 @@ save(df, file = "df.RData")
 
 Note that there is a code for CSV files and another one for RData files. RData files are great to work in R because you can save multiple objects and open them all with just one command instead of loading a CSV per dataframe.
 
-However, the [datasets](https://theuniversityofliverpool-my.sharepoint.com/:f:/g/personal/prossini_liverpool_ac_uk/Ek7qMwJw_J5OpDp3EKeVDQQB0PQ8Fbq7iRJ1MT5tJSL0kQ?e=KFxzbv) we selected for our workshop (and for your assignment) are originally from the [Pew Research Center](https://www.pewresearch.org/tools-and-resources/) and come in the form of SAV files, which is a common type of file used by SPSS. Since SPSS is a paid software (which you have access to with your student account and apps anywhere), we use R to read and manipulate SPSS files with the package "Haven". 
+
+For some basic information and guidance about R and RStudio, check out this tutorial:
+[Getting started with RStudio](https://moderndive.netlify.app/1-getting-started.html)
+[R-Studio Basics by R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/)
+
+
+## Download the data
+
+The [datasets](https://theuniversityofliverpool-my.sharepoint.com/:f:/g/personal/prossini_liverpool_ac_uk/Ek7qMwJw_J5OpDp3EKeVDQQB0PQ8Fbq7iRJ1MT5tJSL0kQ?e=KFxzbv) we selected for our workshop (and for your assignment) are originally from the [Pew Research Center](https://www.pewresearch.org/tools-and-resources/) and come in the form of SAV files, which is a common type of file used by SPSS. Since SPSS is a paid software (which you have access to with your student account and apps anywhere), we use R to read and manipulate SPSS files with the package "Haven". 
 
 ## Getting Started
+
+First things first: whenever you open R to work on something, you need to load the necessary packages. For this workshop, we will use the packages below. 
+
+
+```{r, message=FALSE}
+#loading our packages 
+library(dplyr)
+library(haven)
+library(descr)
+library(ggplot2)
+library(tidyverse)
+
+# run this options line to prevent R from generating scientific notations
+
+options(scipen=999, digits = 4)
+
+```
+
+
 
 Let's load our data and assign it to an object named "df".
 Replace the path with your own downloads folder containing [this file](https://theuniversityofliverpool-my.sharepoint.com/:u:/g/personal/prossini_liverpool_ac_uk/EZt5HUqjpWJLuOjcNjrLwAkB1hQRd__Jf-F86LHWznAIgw?e=lGiiDj)
@@ -142,7 +161,7 @@ Since we don't have any numeric variable in the data, let's take the ordinal cat
 print_labels(df$AVOIDPT1_W74) ## check the labels
 freq(df$AVOIDPT1_W74) ## check the distribution of categories
 df$AVOIDPT1_W74[df$AVOIDPT1_W74==99] <- NA ## always remove 99 before calculating means
-summary(df$AVOIDPT1_W74, na.rm = TRUE)
+summary(df$AVOIDPT1_W74, na.rm = TRUE) # na.rm means you are asking the function to remove NAs (missing values)
 sd(df$AVOIDPT1_W74, na.rm = TRUE)
 
 ```
@@ -243,4 +262,64 @@ ggsave(
 ```
 
 To improve your skills and prepare for the assignment, take a look at the PDF 'codebook', select a couple of different variables and try to replicate the examples of this workshop at home. 
+
+## Calculating Correlations and Testing Hypothesis (week 6)
+
+**Chi-Square Test**
+
+A chi-square is a type of inferential statistic, used to determine whether the differences between the nominal and/or orginal variables to determine if the differences between categories are statistically significant. 
+Considering the variables we are investigating in our data, gender and frequency of political expression on social media, we can use a chi-square to determine whether the  frequency of political expression differs by gender. 
+
+For this, let's consider just the respondents who identified as male or female, as the other two response options had very few observations.
+
+```{r chisq}
+df_gender <- subset(df, F_GENDER == "A man" | F_GENDER == "A woman") # this function is filtering our dataframe to only contain respondents who identify as either men or women. You will note in the Environment pane that now the dataframe has 10011 observations, 82 less than the original data. Note that we are assigning the filtered dataset to a new dataframe. This is to preserve the original data. 
+df_gender$F_GENDER <- droplevels(df_gender$F_GENDER) # this removes the two 'labels' we filtered
+
+# we can use one function to plot the crosstabulation and execute the test
+crosstab(df_gender$AVOIDPT1_W74, df_gender$F_GENDER,chisq = T)
+
+# or simply call the test and look at the result
+chisq.test(df_gender$AVOIDPT1_W74, df_gender$F_GENDER) # which only returns the test results
+
+
+```
+From these results, we can tell that the differences between how frequently men and women post political opinions on social media are significant, as the p-value was 0.04.
+
+
+**Correlations**
+Calculating Pearson's correlation coefficient in R is simple: the most important thing is to know whether correlation is the right test for your data. 
+As you saw in the lecture, correlations are meant to be used to determine the relationship between two quantitative variables (numeric, interval, ratio)
+
+So let's think about our data. 
+So far, we have been using a nominal variable (gender) to understand frequency of political expression on social media. That wouldn't be adequate for a correlation test.
+Instead, we can look at two ordinal variables: freq. of political expression and education. 
+
+These are in our dataset as labeled data/factors, so we need to first convert them to numbers and then make sure that the numeric representation of the numbers are in the correct order. 
+
+
+```{r correlations}
+#let's inspect our data first
+freq(df$F_EDUCCAT2) # we have two variables for educational level, I selected the one with more values:
+print_labels(df$F_EDUCCAT2) # from here we can see that the variables are in the right order, i.e. with higher number meaning higher education.
+#because correlations deal with numeric values, we need to transform our labeled variable in numeric
+
+df$F_EDUCCAT2 <- as.numeric(df$F_EDUCCAT2)
+
+
+freq(df$AVOIDPT1_W74) # in this one, the labels are in the opposite order, with 1 meaning higher frequency and 4 lower. Let's reverse it to facilitate our interpretation:
+df <- df %>% mutate(AVOIDPT1_W74R = recode_factor(as.numeric(df$AVOIDPT1_W74), '1' = '4', '2' =  '3', '3' = '2', '4' = '1'))
+freq(df$AVOIDPT1_W74R) # now we check if the numbers match (they do :) 
+df$AVOIDPT1_W74R <- as.numeric(df$AVOIDPT1_W74R)
+
+# now the correlation
+cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, use='complete.obs')
+
+  
+```
+
+We find a negative correlation (-0.024) that is significant (p = 0.04) between educational levels and frequency of online posting, meaning that there is an inverse relationship between variables (one variable increases and the other decreases). 
+In this example, this can be interpreted as: higher education is correlated with lower frequency of social media political expression (or the  other way around). 
+
+You can also compute correlations for several variables at a time and create either a correlation table or a correlation plot [(for instance, using the package corrplot)](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html). For this, just make sure you are selecting the correct types of variables. 
 
