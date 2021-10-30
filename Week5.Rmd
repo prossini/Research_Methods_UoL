@@ -310,10 +310,10 @@ df$F_EDUCCAT2 <- as.numeric(df$F_EDUCCAT2)
 freq(df$AVOIDPT1_W74) # in this one, the labels are in the opposite order, with 1 meaning higher frequency and 4 lower. Let's reverse it to facilitate our interpretation:
 df <- df %>% mutate(AVOIDPT1_W74R = recode_factor(as.numeric(df$AVOIDPT1_W74), '1' = '4', '2' =  '3', '3' = '2', '4' = '1'))
 freq(df$AVOIDPT1_W74R) # now we check if the numbers match (they do :) 
-df$AVOIDPT1_W74R <- as.numeric(df$AVOIDPT1_W74R)
+df$AVOIDPT1_W74R <- as.numeric(df$AVOIDPT1_W74R) #making sure the variable is numeric
 
 # now the correlation
-cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, use='complete.obs')
+cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, use='complete.obs') # the use = complete.obs is to remove missing values from the data.
 
   
 ```
