@@ -2,7 +2,10 @@
 title: "Week 5 - Basic Descriptives & Week 6 - Correlations & Hypothesis Testing"
 author: "Patricia Rossini"
 date: "10/21/2021"
-output: html_document
+output: 
+  html_document:
+    toc: true
+
 ---
 
 ```{r setup, include=FALSE}
@@ -143,7 +146,9 @@ print_labels(df$F_AGECAT) # this tells us the labels
 freq(df$F_AGECAT) # frequency distribution of respondents per age range 
 
 ```
+
 **Mean and Standard Deviation**
+
 We can calculate means and standard deviations using 'base' R functions. There are also many packages, such as "Psych", that can you can use to create descriptive statistics. For now, let's keep it simple.
 
 In base R, the following functions are used to compute descriptives:
@@ -168,7 +173,7 @@ sd(df$AVOIDPT1_W74, na.rm = TRUE)
 
 Looking at the mean, we can note that on average, respondents are not very active on social media, with the majority of people posting about politics rarely or not at all. 
 
-
+## Examining two variables 
 
 **Crosstabulation**
 
@@ -265,7 +270,8 @@ To improve your skills and prepare for the assignment, take a look at the PDF 'c
 
 ## Calculating Correlations and Testing Hypothesis (week 6)
 
-**Chi-Square Test**
+
+### Chi-Square Test
 
 A chi-square is a type of inferential statistic, used to determine whether the differences between the nominal and/or orginal variables to determine if the differences between categories are statistically significant. 
 Considering the variables we are investigating in our data, gender and frequency of political expression on social media, we can use a chi-square to determine whether the  frequency of political expression differs by gender. 
@@ -287,7 +293,8 @@ chisq.test(df_gender$AVOIDPT1_W74, df_gender$F_GENDER) # which only returns the 
 From these results, we can tell that the differences between how frequently men and women post political opinions on social media are significant, as the p-value was 0.04.
 
 
-**Correlations**
+### Correlations
+
 Calculating Pearson's correlation coefficient in R is simple: the most important thing is to know whether correlation is the right test for your data. 
 As you saw in the lecture, correlations are meant to be used to determine the relationship between two quantitative variables (numeric, interval, ratio)
 
