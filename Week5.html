@@ -171,6 +171,19 @@ pre code {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#r-basics">R Basics</a></li>
+<li><a href="#download-the-data">Download the data</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#examining-two-variables">Examining two variables</a></li>
+<li><a href="#calculating-correlations-and-testing-hypothesis-week-6">Calculating Correlations and Testing Hypothesis (week 6)</a>
+<ul>
+<li><a href="#chi-square-test">Chi-Square Test</a></li>
+<li><a href="#correlations">Correlations</a></li>
+</ul></li>
+</ul>
+</div>
 
 <p>Using the Pew American Trends Dataset, we will use R explore basic descriptive statistics such as the mean, median, and standard deviation. We will also look at frequencies and proportions, and how to create simple frequency plots.</p>
 <p>Then, we will look at some basic measures of association and significance tests, such as correlations, t-tests, and chi-square tests.</p>
@@ -368,7 +381,8 @@ names(df)  #alternative colnames(df)</code></pre>
 ## 4          2804  27.7816
 ## 99           45   0.4459
 ## Total     10093 100.0000</code></pre>
-<p><strong>Mean and Standard Deviation</strong> We can calculate means and standard deviations using ‘base’ R functions. There are also many packages, such as “Psych”, that can you can use to create descriptive statistics. For now, let’s keep it simple.</p>
+<p><strong>Mean and Standard Deviation</strong></p>
+<p>We can calculate means and standard deviations using ‘base’ R functions. There are also many packages, such as “Psych”, that can you can use to create descriptive statistics. For now, let’s keep it simple.</p>
 <p>In base R, the following functions are used to compute descriptives:</p>
 <pre class="r"><code>mean(variable)
 sd(variable)
@@ -401,6 +415,9 @@ summary(df$AVOIDPT1_W74, na.rm = TRUE) # na.rm means you are asking the function
 <pre class="r"><code>sd(df$AVOIDPT1_W74, na.rm = TRUE)</code></pre>
 <pre><code>## [1] 1</code></pre>
 <p>Looking at the mean, we can note that on average, respondents are not very active on social media, with the majority of people posting about politics rarely or not at all.</p>
+</div>
+<div id="examining-two-variables" class="section level2">
+<h2>Examining two variables</h2>
 <p><strong>Crosstabulation</strong></p>
 <p>Let’s start looking at crosstabulation, that is, when you use a variable (e.g. Gender) to understand another variable (e.g. posting about politics).</p>
 <p>We can create tables in R in several ways:</p>
@@ -502,7 +519,8 @@ df %&gt;%
 </div>
 <div id="calculating-correlations-and-testing-hypothesis-week-6" class="section level2">
 <h2>Calculating Correlations and Testing Hypothesis (week 6)</h2>
-<p><strong>Chi-Square Test</strong></p>
+<div id="chi-square-test" class="section level3">
+<h3>Chi-Square Test</h3>
 <p>A chi-square is a type of inferential statistic, used to determine whether the differences between the nominal and/or orginal variables to determine if the differences between categories are statistically significant. Considering the variables we are investigating in our data, gender and frequency of political expression on social media, we can use a chi-square to determine whether the frequency of political expression differs by gender.</p>
 <p>For this, let’s consider just the respondents who identified as male or female, as the other two response options had very few observations.</p>
 <pre class="r"><code>df_gender &lt;- subset(df, F_GENDER == &quot;A man&quot; | F_GENDER == &quot;A woman&quot;) # this function is filtering our dataframe to only contain respondents who identify as either men or women. You will note in the Environment pane that now the dataframe has 10011 observations, 82 less than the original data. Note that we are assigning the filtered dataset to a new dataframe. This is to preserve the original data. 
@@ -546,7 +564,10 @@ chisq.test(df_gender$AVOIDPT1_W74, df_gender$F_GENDER) # which only returns the 
 ## data:  df_gender$AVOIDPT1_W74 and df_gender$F_GENDER
 ## X-squared = 7.9, df = 3, p-value = 0.05</code></pre>
 <p>From these results, we can tell that the differences between how frequently men and women post political opinions on social media are significant, as the p-value was 0.04.</p>
-<p><strong>Correlations</strong> Calculating Pearson’s correlation coefficient in R is simple: the most important thing is to know whether correlation is the right test for your data. As you saw in the lecture, correlations are meant to be used to determine the relationship between two quantitative variables (numeric, interval, ratio)</p>
+</div>
+<div id="correlations" class="section level3">
+<h3>Correlations</h3>
+<p>Calculating Pearson’s correlation coefficient in R is simple: the most important thing is to know whether correlation is the right test for your data. As you saw in the lecture, correlations are meant to be used to determine the relationship between two quantitative variables (numeric, interval, ratio)</p>
 <p>So let’s think about our data. So far, we have been using a nominal variable (gender) to understand frequency of political expression on social media. That wouldn’t be adequate for a correlation test. Instead, we can look at two ordinal variables: freq. of political expression and education.</p>
 <p>These are in our dataset as labeled data/factors, so we need to first convert them to numbers and then make sure that the numeric representation of the numbers are in the correct order.</p>
 <pre class="r"><code>#let&#39;s inspect our data first
@@ -617,6 +638,7 @@ cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, method = &quot;pearson&quot;, use=&#39
 ## -0.001999</code></pre>
 <p>We find a negative correlation (-0.024) that is significant (p = 0.04) between educational levels and frequency of online posting, meaning that there is an inverse relationship between variables (one variable increases and the other decreases). In this example, this can be interpreted as: higher education is correlated with lower frequency of social media political expression (or the other way around).</p>
 <p>You can also compute correlations for several variables at a time and create either a correlation table or a correlation plot <a href="https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html">(for instance, using the package corrplot)</a>. For this, just make sure you are selecting the correct types of variables.</p>
+</div>
 </div>
 
 
