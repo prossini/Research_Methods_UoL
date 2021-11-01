@@ -21,7 +21,7 @@ Then, we will look at some basic measures of association and significance tests,
 
 ## R Basics
 
-First, let's make sure you have the packages you need. Important: you only need to install packages if it is the first time you are using R in your computer. If you have completed this step before, just jump straight to the next section to get started!
+First, let's make sure you have the packages you need. Important: you only need to install packages if it is the first time you are using R in your computer. ***If you have completed this step before, just jump straight to the next section to get started***!
 
 ```{r calling packages, eval=FALSE, message=FALSE, inspect=FALSE}
 # you may need to install packages running the following line:
@@ -30,9 +30,8 @@ install.packages("dplyr", "tidyverse", "descr", "haven")
 ```
 
 
-
 Before digging in, here are some basic commands in R that you need to familiarize yourself with. 
-We will learn more as we progress in the module.
+We will learn more as we progress in the module. You don't have to paste any of this in your script for this class, these are just pointers for general operations in R.
 
 
 ```{r, eval=FALSE, message=FALSE, inspect=FALSE}
@@ -58,9 +57,10 @@ save(df, file = "df.RData")
 Note that there is a code for CSV files and another one for RData files. RData files are great to work in R because you can save multiple objects and open them all with just one command instead of loading a CSV per dataframe.
 
 
-For some basic information and guidance about R and RStudio, check out this tutorial:
-[Getting started with RStudio](https://moderndive.netlify.app/1-getting-started.html)
-[R-Studio Basics by R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/)
+For some basic information and guidance about R and RStudio, check out these tutorials:
+
+-[Getting started with RStudio](https://moderndive.netlify.app/1-getting-started.html)
+-[R-Studio Basics by R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/)
 
 
 ## Download the data
@@ -69,7 +69,9 @@ The [datasets](https://theuniversityofliverpool-my.sharepoint.com/:f:/g/personal
 
 ## Getting Started
 
-First things first: whenever you open R to work on something, you need to load the necessary packages. For this workshop, we will use the packages below. 
+First things first: when you open R to work on something, ***you need to load the necessary packages***. 
+
+For this workshop, we will use the packages below. 
 
 
 ```{r, message=FALSE}
@@ -91,7 +93,7 @@ options(scipen=999, digits = 4)
 Let's load our data and assign it to an object named "df".
 Replace the path with your own downloads folder containing [this file](https://theuniversityofliverpool-my.sharepoint.com/:u:/g/personal/prossini_liverpool_ac_uk/EZt5HUqjpWJLuOjcNjrLwAkB1hQRd__Jf-F86LHWznAIgw?e=lGiiDj)
 ```{r}
-df <- read_sav("~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav") ## replace with your path to the file
+df <- read_sav("~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav") ## replace with your path to the file. On Windows, the path will most likely start with 'C://'
 ```
 
 Before doing anything else, we should inspect our data. This means looking at how many observations there are (in this case, number of survey respondents), and looking at the column names. 
@@ -119,12 +121,13 @@ As you can see, some names are very confusing. Looking at the PDF, we can identi
 
 For the purposes of the workshop, let's first look at a couple of demographics.
 
+
 **Gender**
 
 Gender (F_GENDER) is a categorical variable with 3 labels: man, women, other. 
 
 For categorical variables, we can look at the frequency of each category to get a sense of data distribution. 
-We don't use means or standard deviation to look at categorical variables because their 'numbering' is arbitrary. 
+We don't use means or standard deviation to look at categorical variables because their 'numbering' is arbitrary, so these descriptive statistics would not carry a relevant interpretative meaning.
 
 
 ```{r}
@@ -234,12 +237,20 @@ df %>%
   group_by(F_GENDER, AVOIDPT1_W74) %>% # we are using this to make sure the data is grouped to calculate proportions
   summarize(n = n()) %>% 
   mutate(perc = 100*n/sum(n)) 
+```
 
-`````
+If you want to keep this table as a separate object, just assign it to an object (percentages_tab is an arbitrary name I picked): 
 
+```{r}
+percentages_tab <- df %>% 
+  filter(!is.na(AVOIDPT1_W74), !is.na(F_GENDER), F_GENDER != "Refused", F_GENDER != "In some other way") %>%
+  group_by(F_GENDER, AVOIDPT1_W74) %>% # we are using this to make sure the data is grouped to calculate proportions
+  summarize(n = n()) %>% 
+  mutate(perc = 100*n/sum(n)) 
+
+```
 
 Now that we learned how to calculate percentages using two variables, let's incorporate them in the plot with another pipe:
-
 
 
 ```{r percentage plot, message=FALSE}
@@ -256,9 +267,10 @@ df %>%
 
 
 ```
+
 And done :) 
 
-You can save/export the figures you created using the following code: 
+You can save/export the figures you created using the following code (or by clicking  'export' in the plots pane in RStudio): 
 
 ```{r save plot, eval=FALSE, message=FALSE, inspect=FALSE}
 ggsave(
@@ -267,6 +279,7 @@ ggsave(
 ```
 
 To improve your skills and prepare for the assignment, take a look at the PDF 'codebook', select a couple of different variables and try to replicate the examples of this workshop at home. 
+
 
 ## Calculating Correlations and Testing Hypothesis (week 6)
 
@@ -325,8 +338,8 @@ cor.test(df$F_EDUCCAT2, df$AVOIDPT1_W74R, method = "pearson", use='complete.obs'
   
 ```
 
-We find a negative correlation (-0.024) that is significant (p = 0.04) between educational levels and frequency of online posting, meaning that there is an inverse relationship between variables (one variable increases and the other decreases). 
-In this example, this can be interpreted as: higher education is correlated with lower frequency of social media political expression (or the  other way around). 
+We find a negative correlation (-0.001) that is not significant (p = 0.9) between educational levels and frequency of online posting, meaning that there no inverse relationship between variables.
+
 
 You can also compute correlations for several variables at a time and create either a correlation table or a correlation plot [(for instance, using the package corrplot)](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html). For this, just make sure you are selecting the correct types of variables. 
 
