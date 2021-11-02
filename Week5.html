@@ -211,7 +211,8 @@ write.csv(df, &quot;file.csv&quot;, row.names = F)
 save(df, file = &quot;df.RData&quot;)</code></pre>
 <p>Note that there is a code for CSV files and another one for RData files. RData files are great to work in R because you can save multiple objects and open them all with just one command instead of loading a CSV per dataframe.</p>
 <p>For some basic information and guidance about R and RStudio, check out these tutorials:</p>
-<p>-<a href="https://moderndive.netlify.app/1-getting-started.html">Getting started with RStudio</a> -<a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/">R-Studio Basics by R-Ladies Sydney</a></p>
+<p>-<a href="https://moderndive.netlify.app/1-getting-started.html">Getting started with RStudio</a></p>
+<p>-<a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/">R-Studio Basics by R-Ladies Sydney</a></p>
 </div>
 <div id="download-the-data" class="section level2">
 <h2>Download the data</h2>
@@ -339,6 +340,7 @@ names(df)  #alternative colnames(df)</code></pre>
 ## [159] &quot;COVID_SCI6E_W67&quot;              &quot;WEIGHT_W43_W74&quot;              
 ## [161] &quot;WEIGHT_W67_W74&quot;               &quot;WEIGHT_W74&quot;</code></pre>
 <p>As you can see, some names are very confusing. Looking at the PDF, we can identify some variables of interest.</p>
+<p>In R, we can select a column in the data using the operator $ after the data name. That is, df$variable is the basic sintax to call any variable name from a dataset. Note that df is how we named the data in our working example, but this could be any other name you chose when reading the data file into R using the &lt;- operator.</p>
 <p>For the purposes of the workshop, let’s first look at a couple of demographics.</p>
 <p><strong>Gender</strong></p>
 <p>Gender (F_GENDER) is a categorical variable with 3 labels: man, women, other.</p>
