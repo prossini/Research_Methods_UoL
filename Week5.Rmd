@@ -60,6 +60,7 @@ Note that there is a code for CSV files and another one for RData files. RData f
 For some basic information and guidance about R and RStudio, check out these tutorials:
 
 -[Getting started with RStudio](https://moderndive.netlify.app/1-getting-started.html)
+
 -[R-Studio Basics by R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/)
 
 
@@ -118,6 +119,9 @@ names(df)  #alternative colnames(df)
 ```
 
 As you can see, some names are very confusing. Looking at the PDF, we can identify some variables of interest. 
+
+In R, we can select a column in the data using the operator $ after the data name.
+That is, df$variable is the basic sintax to call any variable name from a dataset. Note that df is how we named the data in our working example, but this could be any other name you chose when reading the data file into R using the <- operator.
 
 For the purposes of the workshop, let's first look at a couple of demographics.
 
