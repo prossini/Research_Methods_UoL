@@ -211,7 +211,8 @@ write.csv(df, &quot;file.csv&quot;, row.names = F)
 save(df, file = &quot;df.RData&quot;)</code></pre>
 <p>Note that there is a code for CSV files and another one for RData files. RData files are great to work in R because you can save multiple objects and open them all with just one command instead of loading a CSV per dataframe.</p>
 <p>For some basic information and guidance about R and RStudio, check out these tutorials:</p>
-<p>-<a href="https://moderndive.netlify.app/1-getting-started.html">Getting started with RStudio</a> -<a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/">R-Studio Basics by R-Ladies Sydney</a></p>
+<p>-<a href="https://moderndive.netlify.app/1-getting-started.html">Getting started with RStudio</a></p>
+<p>-<a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/">R-Studio Basics by R-Ladies Sydney</a></p>
 </div>
 <div id="download-the-data" class="section level2">
 <h2>Download the data</h2>
@@ -231,7 +232,8 @@ library(tidyverse)
 # run this options line to prevent R from generating scientific notations
 
 options(scipen=999, digits = 4)</code></pre>
-<p>Let’s load our data and assign it to an object named “df”. Replace the path with your own downloads folder containing <a href="https://theuniversityofliverpool-my.sharepoint.com/:u:/g/personal/prossini_liverpool_ac_uk/EZt5HUqjpWJLuOjcNjrLwAkB1hQRd__Jf-F86LHWznAIgw?e=lGiiDj">this file</a></p>
+<p>Let’s load our data and assign it to an object named “df”.</p>
+<p>Replace the path with your own downloads folder containing <a href="https://theuniversityofliverpool-my.sharepoint.com/:u:/g/personal/prossini_liverpool_ac_uk/EZt5HUqjpWJLuOjcNjrLwAkB1hQRd__Jf-F86LHWznAIgw?e=lGiiDj">this file</a></p>
 <pre class="r"><code>df &lt;- read_sav(&quot;~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav&quot;) ## replace with your path to the file. On Windows, the path will most likely start with &#39;C://&#39;</code></pre>
 <p>Before doing anything else, we should inspect our data. This means looking at how many observations there are (in this case, number of survey respondents), and looking at the column names.</p>
 <p>This dataset comes with a <a href="https://theuniversityofliverpool-my.sharepoint.com/:b:/g/personal/prossini_liverpool_ac_uk/EfUlnuOHSrRBiH7jngCJakIBWDAQ9SoNXWP2fsC6b3me-g?e=tpR5lL_">PDF file</a> that contains the survey questions and their “labels”, which are the column names you will see in R. When working with this type of survey, you should always keep the PDF open to refer to the correct columns.</p>
@@ -339,6 +341,7 @@ names(df)  #alternative colnames(df)</code></pre>
 ## [159] &quot;COVID_SCI6E_W67&quot;              &quot;WEIGHT_W43_W74&quot;              
 ## [161] &quot;WEIGHT_W67_W74&quot;               &quot;WEIGHT_W74&quot;</code></pre>
 <p>As you can see, some names are very confusing. Looking at the PDF, we can identify some variables of interest.</p>
+<p>In R, you can select a column (variable) in a dataframe using the operator $ after the dataframe name. In this working example, we named our dataframe “df”, so we can call any column by using df$variable. Note that “df” is an arbitrary name: you can select any name when you assign the external file to an R object using the operator &lt;- and the command ‘read_sav’.</p>
 <p>For the purposes of the workshop, let’s first look at a couple of demographics.</p>
 <p><strong>Gender</strong></p>
 <p>Gender (F_GENDER) is a categorical variable with 3 labels: man, women, other.</p>
