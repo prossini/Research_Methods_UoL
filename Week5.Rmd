@@ -60,6 +60,7 @@ Note that there is a code for CSV files and another one for RData files. RData f
 For some basic information and guidance about R and RStudio, check out these tutorials:
 
 -[Getting started with RStudio](https://moderndive.netlify.app/1-getting-started.html)
+
 -[R-Studio Basics by R-Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/)
 
 
@@ -91,6 +92,7 @@ options(scipen=999, digits = 4)
 
 
 Let's load our data and assign it to an object named "df".
+
 Replace the path with your own downloads folder containing [this file](https://theuniversityofliverpool-my.sharepoint.com/:u:/g/personal/prossini_liverpool_ac_uk/EZt5HUqjpWJLuOjcNjrLwAkB1hQRd__Jf-F86LHWznAIgw?e=lGiiDj)
 ```{r}
 df <- read_sav("~/OneDrive - The University of Liverpool/Teaching/COMM747 Research Methods/Datasets/American Trends Pew/ATP W74.sav") ## replace with your path to the file. On Windows, the path will most likely start with 'C://'
@@ -118,6 +120,10 @@ names(df)  #alternative colnames(df)
 ```
 
 As you can see, some names are very confusing. Looking at the PDF, we can identify some variables of interest. 
+
+In R, you can select a column (variable) in a dataframe using the operator $ after the dataframe name. 
+In this working example, we named our dataframe "df", so we can call any column by using df$variable. Note that "df" is an arbitrary name: you can select any name when you assign the external file to an R object using the operator <- and the command 'read_sav'. 
+
 
 For the purposes of the workshop, let's first look at a couple of demographics.
 
