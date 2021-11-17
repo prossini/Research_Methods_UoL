@@ -309,6 +309,27 @@ leader_hashtag %>%
 ```
 
 
+We can also do the same for our #COP26 dataset. Which other hashtags are used in these tweets? 
+```{r echo=TRUE, include=TRUE}
+# with the code below, we are grouping the data to see the top 10 hashtags per account and assigning the results to a new dataframe.
+COP_hashtags <- COP26 %>% 
+  unnest_tokens(hashtag, text, "tweets", to_lower = FALSE) %>%
+  filter(str_detect(hashtag, "^#"), hashtag != "#COP26", hashtag != "#cop26", hashtag != "#Cop26") %>% #in this line we are filtering the hashtag #COP26 because we already know all tweets will have it
+  count(hashtag, sort = TRUE) %>%
+  top_n(20)
+
+## then we can plot these results to visualize:
+COP_hashtags %>%
+  mutate(hashtag = reorder(hashtag, n)) %>%
+  ggplot(aes(x = hashtag, y = n)) +
+  geom_col(position = "dodge") +
+  coord_flip() + 
+  labs(x = "Count",
+       y = "Hashtag",
+       title = "Top 20 Popular Hashtags Tweeted Alongside #COP26")
+
+```
+
 
 # That's all (for now)!
 
@@ -316,5 +337,5 @@ This workshop only focused on getting tweets based on accounts and hashtags as t
 
 If you want to keep learning R and use Twitter data in your dissertation, you can also explore more automated techniques that we will not to cover in the module. 
 
-For instance, you could use textual mining and analysis techniques if you want to find which words are more frequently associated with a particular hashtag. You can also consider network analysis techniques if you want to study relationships between accounts. There are several online tutorials that will teach you how to implement these techniques on tweets using R. Just use Google :) 
+For instance, you could use textual mining and analysis techniques if you want to find which words are more frequently associated with a particular hashtag. You can also consider network analysis techniques if you want to study relationships between accounts. There are several online tutorials that will teach you how to implement these techniques on tweets using R.  
 
