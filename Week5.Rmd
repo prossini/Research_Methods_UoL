@@ -347,3 +347,88 @@ We find a negative correlation (-0.001) that is not significant (p = 0.9) betwee
 
 You can also compute correlations for several variables at a time and create either a correlation table or a correlation plot [(for instance, using the package corrplot)](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html). For this, just make sure you are selecting the correct types of variables. 
 
+
+## Additional functions for your report (New! Updated Nov 22)
+
+Based on a couple of questions that surfaced from students, here are some guidelines on how to look at questions that have results in multiple columns. For instance, W74 has some questions about online harassment. The variable ON12 refers to different online environments where people who have suffered online abuse had their most recent experience. ON12 has six items, so there are six response columns. 
+
+
+```{r pivot, fig.show='hide'}
+
+## first let's inspect simple frequencies and the labels
+freq(df$ON12_a_W74)
+freq(df$ON12_b_W74)
+freq(df$ON12_e_W74)
+freq(df$ON12_f_W74)
+freq(df$ON12_g_W74)
+freq(df$ON12_h_W74)
+
+# note that there are a LOT of NAs. This is because people only answer this question if they have abswered 'yes' in a previous question.
+# We know this because the questionnaire says ASK IF YES TO ANY IN ON7 (ON7a-h=1) / meaning that only those who said yes on the question labeled ON7 receive this follow up.  
+
+```
+
+Note that there are a LOT of NAs in all answer items. This is because people only answer this question if they have answered 'yes' in a previous question.
+
+How do I know? The questionnaire says ASK IF YES TO ANY IN ON7 (ON7a-h=1) / meaning that only those who said yes on the question labeled ON7 receive this follow up.  
+
+Now that we have a sense of what the data looks like, let's create a new dataset to plot. 
+
+In the code below, we will: 
+1) create a new dataframe that only includes the variables of interest
+2) transform our dataframe from wide (many columns) to long (many rows) by creating one variable that refers to the six response columns
+3) calculate percentages for each of the response columns
+4) make a plot 
+
+```{r pivoting}
+
+## create a new df with the variables of interest. we can use starts_with to select columns based on a pattern, which is helpful for these items as any question with multiple answers in the pew dataset are labeled with a,b,c... and use the same question label:
+df1 <- select(df, starts_with("ON12"), F_GENDER) 
+## selecting only 5 variables
+# renaming the variables for easier reading 
+df1 <- df1 %>% rename("Social Media" = ON12_a_W74,"Online Dating" = ON12_b_W74,"Gaming" = ON12_e_W74, "E-mail" = ON12_f_W74, "Online Forum" = ON12_g_W74, "Messaging app" = ON12_h_W74)
+
+# pivoting the data, i.e. making the separate data columns become a values in one column for plotting
+
+df1 <- df1 %>%
+  pivot_longer(!F_GENDER, names_to = "platform", values_to = "values")
+# now it's a good time to click on your new df 1 (or type the code below)
+
+view(df1)
+
+# transforming factors, so that we have the gender and labels instead of number
+df1$values <- as_factor(df1$values)
+df1$F_GENDER <- as_factor(df1$F_GENDER)
+
+view(df1)
+
+  
+
+## Creating a new dataframe that includes the percentages per platform for our plot (note that this is the same code we used in class)
+x <- df1 %>% 
+  filter(values != "Refused") %>%
+  group_by(platform, values, F_GENDER) %>% 
+  summarize(n = n(), na.rm = TRUE) %>% # removing NAs so we get valid percentages (for platform users) and not percentages overall which would include non-users
+  mutate(perc = 100*n/sum(n))
+
+# inspect again to see what the results are
+view(x)
+# check the x dataframe against the percentages you get with freq() -- if all looks good, move on to plotting:
+
+#  
+x %>%
+  filter(values == "Yes, it happened in this online environment",  F_GENDER == "A man" | F_GENDER == "A woman") %>% 
+  ggplot(aes(x= platform, y = perc, fill = F_GENDER)) +
+  geom_bar(position = "dodge",stat = "identity") + #we changed stat to identity because we are providing the percentages in the dataframe instead of using counts
+  labs(title = "Where did your most recent online harassment take place?", caption = "", x = "", y = "Frequency (%)", fill = "Gender") + 
+  theme_minimal() 
+  
+```
+
+**Note that you don't have to do this for your own report**. 
+
+This additional piece of code is only here to help those of you who are trying to combine columns and couldn't figure out how to do it. With the exception of the pivoting part (making your dataframe long instead of wide), the code for everything else was already in other examples in this worksheet.
+
+Good luck :) 
+
+
