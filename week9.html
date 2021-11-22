@@ -218,19 +218,20 @@ library(tidytext)</code></pre>
 <div id="collecting-twitter-data" class="section level2">
 <h2>Collecting Twitter Data:</h2>
 <p>Twitter is among the easiest/most open social media platforms to collect data from. You can get data from Twitter using the API (application programming interface), which require creating a <a href="http://dev.twitter.com">developers account</a>.</p>
-<p>After your account is ready, create a project and an app.</p>
+<p>After your account is ready, create a project and an app. <strong>Also request ‘elevated’ access following the instructions on Canvas.</strong></p>
 <p>There are several R packages that interact with Twitter’s API. We will use rtweet, by <a href="https://rtweet.info/articles/intro.html">Michael Kearney</a>, which can query both the REST and the stream APIs.</p>
 <p>Now, you need to authenticate with Twitter using the credentials you created for your app:</p>
 <pre class="r"><code>## paste use your credentials between quotes. 
 ## Create a token
 
 token &lt;- create_token(
-  app = &#39;tweet-collections-R&#39;, #your app name
-  consumer_key = &quot;GCrkpYIFGQyRunSGcMGcL0XAw&quot;,#consumer key for your app, replace app_key with your app&#39;s key between quotes
-  consumer_secret = &quot;4PnzIjSxOEu9WfYN2dhRj6wOW7JfmjIJA4cpQxy7iGyBwprhRb&quot;)#consumer secret for your app, app_secret with your app&#39;s secret between quote</code></pre>
+  app = app_name, #your app name in quotations
+  consumer_key = app_key,#consumer key for your app, replace app_key with your app&#39;s key between quotes
+  consumer_secret = app_secret)#consumer secret for your app, app_secret with your app&#39;s secret between quote</code></pre>
 <p>There are different types of Twitter data you can collect.</p>
 <p>For the purposes of this workshop and the hands-on work we do here, we will focus a bit more on the REST API, which collects tweets from a timeline (up to 3200) and from a search (of hashtags, keywords etc), as well as networks of users – e.g. followers / followed accounts.</p>
-<p>Your free developer account gives you essential access to Twitter data, with a limit of 500,000 tweets per month. If you decide to use Twitter data for your dissertation, you can also apply for <a href="academic%20access">https://developer.twitter.com/en/products/twitter-api/academic-research</a>, which can give you access to 10 million tweets per month for free.</p>
+<p>Your free developer account gives you essential access to Twitter data, with a limit of 500,000 tweets per month. The Elevated access allows up to 2 million tweets/month.</p>
+<p>If you decide to use Twitter data for your dissertation, you can also apply for <a href="academic%20access">https://developer.twitter.com/en/products/twitter-api/academic-research</a>, which can give you access to 10 million tweets per month for free.</p>
 <div id="timeline-search" class="section level3">
 <h3>Timeline Search</h3>
 <p>Let’s begin with timeline searches, that is, retrieving up to 3200 tweets from a single (or multiple) public accounts. You would use these commands to collect the content of tweets by an account, including data about engagement (likes, retweets). For instance, let’s compare tweets by Boris Johnson &amp; the Conservative party vs tweets by Keir Starmer &amp; Labour</p>
@@ -249,8 +250,9 @@ write_as_csv(leaders, file_name = &quot;leaders_tweets_16112021.csv&quot;) # to 
 <p>Now we have a dataframe with 90 variables and over 12,000 Tweets from the four accounts.<br />
 As you learned before, the first step is to inspect our data by looking at the column names:</p>
 <p>With this command, we can see the different columns in our dataframe. We have engagement data (e.g. likes, retweets), data about devices used to tweet, geolocation etc. You can check Twitter’s <a href="https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet">documentation</a> to see what each of these columns mean if you are curious. Unlike our survey datasets, however, it is a bit easier to guess what each column contains by looking at the column name.</p>
-<p>We can also view our dataframe in RStudio by clickong on it in the Environment tab, or inspect the first few columns using:</p>
-<pre class="r"><code>head(leaders)</code></pre>
+<p>We can also view our dataframe in RStudio by clicking on it in the Environment tab, or inspect the first few columns using:</p>
+<pre class="r"><code>view(leaders)
+head(leaders)</code></pre>
 </div>
 <div id="inspecting-our-data" class="section level3">
 <h3>Inspecting our data</h3>
@@ -301,10 +303,8 @@ leaders_analysis %&gt;% group_by(screen_name) %&gt;% summarise(min(created_at), 
   &quot;#cop26&quot;,include_rts = FALSE, retryonratelimit = TRUE) # here we are asking the API for tweets using this hashtag, excluding RTs
 
 
-x &lt;- search_tweets()
-
 save(COP26, file = &quot;COP26_tweets_16112021.RData&quot;) # to save it as an R object OR
-write_as_csv(COP26, file_name = &quot;COP26_tweets_16112021.csv&quot;) # to save as a CSV that can be opened in excel. This function is from the package rtweet, </code></pre>
+write_as_csv(COP26, file_name = &quot;COP26_tweets_16112021.csv&quot;) # to save as a CSV that can be opened in excel. This function is from the package rtweet</code></pre>
 <p>If we inspect this dataset (using colnames, or clicking on the environment), you will see that here we have tweets by many different accounts that used the hashtag #COP26. The difference from the first dataset we collected is that instead of getting 3200 tweets by a defined number of accounts, in this search we are getting a sample of recent tweets using this hashtag that have been posted by any account.</p>
 </div>
 </div>
